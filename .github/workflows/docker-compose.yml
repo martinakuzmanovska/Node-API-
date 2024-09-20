@@ -18,16 +18,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      # Step 3: Log in to DockerHub
+      # Step 3: Install Docker Compose manually (from official GitHub releases)
+      - name: Install Docker Compose
+        run: |
+          DOCKER_COMPOSE_VERSION=2.12.2  # You can change this version if needed
+          sudo curl -L "https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose version  # Verify installation
+
+      # Step 4: Log in to DockerHub
       - name: Log in to DockerHub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      # Step 4: Build and Push Docker images using docker-compose
+      # Step 5: Build and Push Docker images using docker-compose
       - name: Build and Push Docker images
         run: |
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
 
-      # Step 5: Log out from DockerHub
+      # Step 6: Log out from DockerHub
       - name: Log out from DockerHub
         run: docker logout
