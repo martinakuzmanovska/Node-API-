@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Node API and MongoDB
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the 'main' branch
+      - main 
 
 jobs:
   build:
@@ -21,10 +21,10 @@ jobs:
       # Step 3: Install Docker Compose manually (from official GitHub releases)
       - name: Install Docker Compose
         run: |
-          DOCKER_COMPOSE_VERSION=2.12.2  # You can change this version if needed
+          DOCKER_COMPOSE_VERSION=2.12.2  
           sudo curl -L "https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose version  # Verify installation
+          docker-compose version  
 
       # Step 4: Log in to DockerHub
       - name: Log in to DockerHub
