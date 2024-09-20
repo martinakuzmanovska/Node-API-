@@ -12,7 +12,7 @@ services:
   # Node API service
   api: 
     build: .
-     image: martinakuzamanovska/my-node-api:latest
+    image: martinakuzamanovska/my-node-api:latest
     ports: 
       - 4000:3000
     environment: 
