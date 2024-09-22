@@ -1,10 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: mongo-deployment
-  labels:
-    app: mongo
+  name: mongo-statefulset
+  namespace: node-api-namespace
 spec:
+  serviceName: "mongo-service"
   replicas: 3
   selector:
     matchLabels:
@@ -21,26 +21,23 @@ spec:
         - containerPort: 27017
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
-          valueFrom: 
+          valueFrom:
             secretKeyRef:
               name: mongo-secret
               key: mongo-user
         - name: MONGO_INITDB_ROOT_PASSWORD
-          valueFrom: 
+          valueFrom:
             secretKeyRef:
               name: mongo-secret
               key: mongo-password
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongo-service
-  labels:
-    app: mongo
-spec:
-  ports:
-    - port: 27017
-  clusterIP: None 
-  selector:
-    app: mongo  
+        volumeMounts:
+        - name: mongo-persistent-storage
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-persistent-storage
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 5Gi
