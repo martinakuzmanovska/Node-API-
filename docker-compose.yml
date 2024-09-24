@@ -22,7 +22,7 @@ services:
       NAME: nodemongo
     depends_on: 
       - mongo_db
-
+#volumes
 volumes: 
   mongo_db: {}
     
